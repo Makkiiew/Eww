@@ -1,13 +1,79 @@
-// eww.scss
-
+// ============================================================
+//  RESET & GLOBAL
+// ============================================================
 * {
-  all: unset; // Resets default GTK styles
+  all: unset;
+  font-family: "JetBrains Mono", sans-serif;
 }
 
-window {
-  background-color: #353535;
-  color: #ffffff;
-  border-radius: 10px;
-  font-family: sans-serif;
-  font-size: 20px;
+// ============================================================
+//  DASHBOARD STYLES
+// ============================================================
+
+// The Dashboard Window background
+.dashboard_container {
+  background-color: #1e1e2e;
+  border: 2px solid #89b4fa;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.clock_box {
+  background-color: #313244;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.clock_text {
+  font-size: 24px;
+  font-weight: bold;
+  color: #cdd6f4;
+}
+
+.sub_text {
+  font-size: 12px;
+  color: #a6adc8;
+  margin-top: 4px;
+}
+
+.toggle_btn {
+  background-color: #45475a;
+  color: #cdd6f4;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.toggle_btn:hover {
+  background-color: #89b4fa;
+  color: #1e1e2e;
+}
+
+// ============================================================
+//  TOP BAR STYLES
+// ============================================================
+
+// The Bar Window background
+.bar_container {
+  background-color: #11111b; // Darker than dashboard
+  color: #cdd6f4;
+  padding: 0 10px;
+  border-radius: 20px;
+  border-bottom: 1px solid #313244;
+}
+
+.bar_item {
+  margin: 0 8px;
+  font-weight: bold;
+}
+
+.bar_time {
+  font-weight: 800;
+  color: #f9e2af; // Yellowish accent
+}
+
+.sep {
+  color: #45475a;
 }

@@ -1,18 +1,110 @@
-;; eww.yuck
+;; ============================================================
+;;
+;;  VARIABLES (The State)
+;;
+;; ============================================================
 
-(defwindow example
+;; Poll: Runs a shell command every 1s
+(defpoll time :interval "1s" "date '+%H:%M:%S'")
+(defpoll wifi_name :interval "5s"
+"nmcli -t -f active,ssid dev wifi | grep '^yes' | cut -d: -f2")
+
+;; Var: Only changes when we tell it to (via eww update)
+(defvar reveal_text false)
+
+
+;; ============================================================
+;;
+;;  WIDGET DEFINITIONS (The Components)
+;;
+;; ============================================================
+
+;; --- Dashboard Widgets ---
+
+(defwidget clock_module []
+  (box :class "clock_box"
+    :orientation "vertical"
+    (label :text time :class "clock_text")
+    (label :text "Ueda, Japan" :class "sub_text")
+  )
+)
+
+(defwidget surprise_button []
+  (button :onclick "eww update reveal_text=${!reveal_text}"
+    :class "toggle_btn"
+    (label :text "${reveal_text ? 'Surprise! 🎌' : 'Click Me'}")
+  )
+)
+
+;; --- Top Bar Widgets ---
+
+(defwidget left_stuff []
+  (box :orientation "h" :space-evenly false :halign "start"
+    (button :class "bar_item" "🏠 Home")
+    (label :text "|" :class "sep")
+    (button :class "bar_item" "Workspaces")
+  )
+)
+
+(defwidget center_stuff []
+  (box :orientation "h" :space-evenly false :halign "center"
+    (label :text time :class "bar_time")
+  )
+)
+
+(defwidget right_stuff []
+  (box :orientation "h" :space-evenly false :halign "end"
+    (label :text "    ${wifi_name}" :class "bar_item")
+    (label :text "|" :class "sep")
+    (label :text "CPU Temp" :class "bar_item")
+  )
+)
+
+
+;; ============================================================
+;;
+;;  WINDOW DEFINITIONS (The Containers)
+;;
+;; ============================================================
+
+;; 1. The Dashboard Window (Floating widget)
+(defwindow main_dashboard
   :monitor 0
-  :geometry (geometry :x "0%"
-    :y "0%"
+  :geometry (geometry :x "20px"
+    :y "60px"  ;; Moved down to avoid hitting the top bar
     :width "200px"
-    :height "60px"
-  :anchor "center")
+    :height "300px"
+  :anchor "top left")
   :stacking "fg"
   :windowtype "dock"
   :wm-ignore false
-  (box :orientation "horizontal"
-    :halign "center"
-    (label :text "Current Time: ${time}")
+  
+  (box :orientation "vertical"
+    :space-evenly false
+    :spacing 20
+    :class "dashboard_container"
+    (clock_module)
+    (surprise_button)
+  )
 )
+
+;; 2. The Top Bar (Status bar)
+(defwindow top_bar
+  :monitor 0
+  :geometry (geometry :x "0%"
+    :y "1%"
+    :width "99%"
+    :height "30px"
+  :anchor "top center")
+  :stacking "fg"
+  :exclusive true ;; Reserves space on Wayland
+  :windowtype "dock"
+  :wm-ignore false
   
-  
+  (centerbox :orientation "horizontal"
+    :class "bar_container"
+    (left_stuff)
+    (center_stuff)
+    (right_stuff)
+  )
+)

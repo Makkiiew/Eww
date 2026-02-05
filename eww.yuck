@@ -1,0 +1,15 @@
+;; eww.yuck
+
+(defwindow example
+  :monitor 0
+  :geometry (geometry :x "0%"
+                      :y "0%"
+                      :width "200px"
+                      :height "60px"
+                      :anchor "center")
+  :stacking "fg"
+  :windowtype "dock"
+  :wm-ignore false
+  (box :orientation "horizontal"
+       :halign "center"
+    (label :text "Hello, Wayland!")))

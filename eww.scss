@@ -66,12 +66,19 @@
 
 .bar_item {
   margin: 0 8px;
-  font-weight: bold;
+  font-weight: 600;
+  color: #bac2de;
 }
 
 .bar_time {
-  font-weight: 800;
-  color: #f9e2af; // Yellowish accent
+  color: #cdd6f4; // Bright White
+  font-weight: 800; // Extra Bold
+}
+
+.bar_date {
+  color: #a6adc8; // Greyish
+  margin-right: 10px; // Space between date and time
+  font-weight: 500;
 }
 
 .sep {

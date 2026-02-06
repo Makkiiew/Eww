@@ -5,9 +5,13 @@
 ;; ============================================================
 
 ;; Poll: Runs a shell command every 1s
-(defpoll time :interval "1s" "date '+%H:%M:%S'")
+(defpoll time :interval "1s" "date '+%H:%M'")
+(defpoll date :interval "1s" "date '+%a, %b %d'")
 (defpoll wifi_name :interval "5s"
 "nmcli -t -f active,ssid dev wifi | grep '^yes' | cut -d: -f2")
+(defpoll ram_usage :interval "2s"
+  "free -m | grep Mem | awk '{printf \"%.0f\", ($3/$2)*100}'")
+
 
 ;; Var: Only changes when we tell it to (via eww update)
 (defvar reveal_text false)
@@ -40,26 +44,28 @@
 
 (defwidget left_stuff []
   (box :orientation "h" :space-evenly false :halign "start"
-    (button :class "bar_item" "🏠 Home")
-    (label :text "|" :class "sep")
-    (button :class "bar_item" "Workspaces")
+    ;; We will put real Workspaces here next!
+    (button :class "bar_item" "Workspaces Placeholder")
   )
 )
 
 (defwidget center_stuff []
   (box :orientation "h" :space-evenly false :halign "center"
-    (label :text time :class "bar_time")
+    ;; Two labels: One for Date (accent color), one for Time (white)
+    (label :text "${date}" :class "bar_date")
+    (label :text "${time}" :class "bar_time")
   )
 )
 
 (defwidget right_stuff []
   (box :orientation "h" :space-evenly false :halign "end"
-    (label :text "    ${wifi_name}" :class "bar_item")
+    (label :text "RAM ${ram_usage}%" :class "bar_item")
     (label :text "|" :class "sep")
-    (label :text "CPU Temp" :class "bar_item")
+    (label :text "CPU ${cpu_temp}°C" :class "bar_item")
+    (label :text "|" :class "sep")
+    (label :text "NET ${wifi_name}" :class "bar_item")
   )
 )
-
 
 ;; ============================================================
 ;;

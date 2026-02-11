@@ -13,7 +13,7 @@
 // The Dashboard Window background
 .dashboard_container {
   background-color: #1e1e2e;
-  border: 2px solid #89b4fa;
+  border: 3px solid #89b4fa;
   border-radius: 12px;
   padding: 20px;
 }
@@ -57,17 +57,18 @@
 
 // The Bar Window background
 .bar_container {
-  background-color: #11111b; // Darker than dashboard
+  background-color: #1e1e2e; // Darker than dashboard
   color: #cdd6f4;
   padding: 0 10px;
+  border: 3px solid #b4befe;
   border-radius: 20px;
-  border-bottom: 1px solid #313244;
+    
 }
 
 .bar_item {
   margin: 0 8px;
   font-weight: 600;
-  color: #bac2de;
+  color: #cdd6f4;
 }
 
 .bar_time {
@@ -76,11 +77,86 @@
 }
 
 .bar_date {
-  color: #a6adc8; // Greyish
+  color: #cdd6f4; // Greyish
   margin-right: 10px; // Space between date and time
   font-weight: 500;
 }
 
+.workspace_label {
+  background-color: #b4befe; // Blue background
+  color: #1e1e2e; // Dark text
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-weight: bold;
+  margin-right: 10px;
+  border-radius: 20px;
+  margin-left: -7px;
+}
+
+.workspaces {
+  // Container adjustments if needed
+  margin-left: 10px;
+}
+
+.workspaces button {
+  padding: 4px 10px;
+  background-color: transparent;
+  color: #6c7086; // Dimmed gray for inactive
+  font-weight: bold;
+  border-radius: 20px;
+  transition: none;
+  border: 2px solid transparent;
+}
+
+
+.workspaces button:hover {
+  background-color: #313244;
+  color: #cdd6f4;
+}
+
+// The Active Workspace (Current)
+.workspaces .active {
+  background-color: #89b4fa; // Your blue accent
+  color: #1e1e2e; // Dark text for contrast
+  min-width: 30px; // Make it look substantial
+}
+
 .sep {
   color: #45475a;
+}
+
+
+.icon_color {
+  color: #b584f2; 
+  margin-right: 5px; 
+  font-size: 16px; 
+}
+.text_val { 
+  color: #cdd6f4; 
+  font-weight: bold; 
+}
+.update_text {
+  color: #f9e2af; /* Yellow/Orange */
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.update_btn {
+  background-color: #f9e2af; /* Yellow background */
+  color: #1e1e2e; /* Dark text */
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  margin-right: 10px;
+  transition: all 0.2s;
+}
+
+.update_btn:hover {
+  background-color: #fab387; /* Orange on hover */
+  //cursor: pointer; /* Shows the hand cursor */
+}
+
+.update_text {
+  color: inherit; /* Inherit from button */
 }

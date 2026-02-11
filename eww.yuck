@@ -11,10 +11,17 @@
 "nmcli -t -f active,ssid dev wifi | grep '^yes' | cut -d: -f2")
 (defpoll ram_usage :interval "2s"
   "free -m | grep Mem | awk '{printf \"%.0f\", ($3/$2)*100}'")
+;; Polls every 30 minutes for updates
+(defpoll updates :interval "30m" "~/.config/eww/scripts/updates.sh")
+(defpoll current_desktop :interval "1s"
+"~/.config/eww/scripts/get_workspace.sh")
 
 
 ;; Var: Only changes when we tell it to (via eww update)
 (defvar reveal_text false)
+
+;; Poll every 300ms so it feels responsive
+(defpoll workspaces :interval "300ms" "~/.config/eww/scripts/workspaces.sh")
 
 
 ;; ============================================================
@@ -43,12 +50,15 @@
 ;; --- Top Bar Widgets ---
 
 (defwidget left_stuff []
-  (box :orientation "h" :space-evenly false :halign "start"
-    ;; We will put real Workspaces here next!
-    (button :class "bar_item" "Workspaces Placeholder")
+  (box :class "workspaces" :orientation "h" :space-evenly true :halign "start" :spacing 2
+    (for entry in workspaces
+      (button :class {entry.active ? "active" : "inactive"}
+        :onclick "qdbus6 org.kde.KWin /KWin org.kde.KWin.setCurrentDesktop ${entry.id}"
+        (label :text "${entry.name}")
+      )
+    )
   )
 )
-
 (defwidget center_stuff []
   (box :orientation "h" :space-evenly false :halign "center"
     ;; Two labels: One for Date (accent color), one for Time (white)
@@ -57,17 +67,45 @@
   )
 )
 
-(defwidget right_stuff []
-  (box :orientation "h" :space-evenly false :halign "end"
-    (label :text "RAM ${ram_usage}%" :class "bar_item")
-    (label :text "|" :class "sep")
-    (label :text "CPU ${cpu_temp}°C" :class "bar_item")
-    (label :text "|" :class "sep")
-    (label :text "NET ${wifi_name}" :class "bar_item")
+;; 1. Define the Update Module separately (Top Level)
+(defwidget update_module []
+  ;; Only show if we have updates
+  (revealer :transition "slideleft"
+    :reveal {updates != ""}
+    (box :orientation "h" :space-evenly false :class "update_box"
+      (button :onclick "~/.config/eww/scripts/start_update.sh"
+        :class "update_btn"
+        (label :text "📦 ${updates} Updates" :class "update_text")
+      )
+    )
   )
 )
 
-;; ============================================================
+;; 2. Define the Right Stuff container
+(defwidget right_stuff []
+  (box :orientation "h" :space-evenly false :halign "end"
+    
+    ;; 3. CALL the Update Module here
+    (update_module)
+    
+    ;; Optional separator if updates exist
+    (label :text "|" :class "sep" :visible {updates != ""})
+    
+    ;; RAM Section
+    (box :class "metric_box" :space-evenly false
+      (label :text " " :class "icon_color")
+      (label :text "${ram_usage}% " :class "text_val")
+    )
+    
+    (label :text "| " :class "sep")
+    
+    ;; Wifi Section
+    (label :text " " :class "icon_color")
+    (label :text "${wifi_name}" :class "text_val")
+  )
+)
+
+;; ===========================================================
 ;;
 ;;  WINDOW DEFINITIONS (The Containers)
 ;;
@@ -98,7 +136,7 @@
 (defwindow top_bar
   :monitor 0
   :geometry (geometry :x "0%"
-    :y "1%"
+    :y "0%"
     :width "99%"
     :height "30px"
   :anchor "top center")

@@ -127,7 +127,7 @@
 
 
 .icon_color {
-  color: #b584f2; 
+  color: #b4befe; 
   margin-right: 5px; 
   font-size: 16px; 
 }
@@ -159,4 +159,44 @@
 
 .update_text {
   color: inherit; /* Inherit from button */
+}
+/* Container for the whole module */
+.music_module {
+  background-color: #1e1e2e;
+  border-radius: 20px;
+  padding: 4px 6px; /* Tight padding to keep it pill-shaped */
+  border: 2px solid #b4befe; /* Blue Border */
+  transition: all 0.3s ease;
+}
+
+/* The Music Note Icon */
+.music_icon {
+  background-color: transparent;
+  color: #b4befe; /* Blue Icon */
+  font-size: 16px;
+  padding: 0 6px;
+  border-radius: 50%;
+}
+
+.music_icon:hover {
+  color: #cdd6f4; /* White on hover */
+}
+
+/* The Song Title Text */
+.music_text {
+  color: #b4befe;
+  margin: 0 10px;
+  font-weight: 600;
+}
+
+/* The Skip Button */
+.music_skip {
+  color: #b4befe;
+  font-size: 14px;
+  padding: 0 8px;
+  margin-right: 4px; /* Space from edge */
+}
+
+.music_skip:hover {
+  color: #f38ba8; /* Red/Pink on hover (for contrast) */
 }

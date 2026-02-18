@@ -15,10 +15,12 @@
 (defpoll updates :interval "30m" "~/.config/eww/scripts/updates.sh")
 (defpoll current_desktop :interval "1s"
 "~/.config/eww/scripts/get_workspace.sh")
+(defpoll music_listen :interval "1s" "~/.config/eww/scripts/get_music.sh")
 
 
 ;; Var: Only changes when we tell it to (via eww update)
 (defvar reveal_text false)
+(defvar music_reveal false)
 
 ;; Poll every 300ms so it feels responsive
 (defpoll workspaces :interval "300ms" "~/.config/eww/scripts/workspaces.sh")
@@ -59,11 +61,42 @@
     )
   )
 )
+
+(defwidget music_module []
+  (eventbox :onhover "${EWW_CMD} update music_reveal=true"
+    :onhoverlost "${EWW_CMD} update music_reveal=false"
+    :cursor "pointer"
+    (box :class "music_module" :space-evenly false
+      
+      ;; 1. The Always-Visible Icon (Click to Play/Pause)
+      (button :onclick "playerctl play-pause" :class "music_icon" "🎵")
+      
+      ;; 2. The Hidden Content (Reveals on Hover)
+      (revealer :transition "slideright"
+        :reveal music_reveal
+        :duration "350ms"
+        (box :space-evenly false
+          
+          ;; Song Title
+          (label :text "${music_listen}" :class "music_text")
+          
+          ;; 3. The Skip Button (Only visible on hover)
+          (button :onclick "playerctl next" :class "music_skip" "⏭")
+        )
+      )
+    )
+  )
+)
 (defwidget center_stuff []
   (box :orientation "h" :space-evenly false :halign "center"
     ;; Two labels: One for Date (accent color), one for Time (white)
     (label :text "${date}" :class "bar_date")
+    (label :text "| " :class "sep")
     (label :text "${time}" :class "bar_time")
+    (label :text "| " :class "sep")
+    (box :orientation "h" :halign "center"
+      (music_module)
+    )
   )
 )
 

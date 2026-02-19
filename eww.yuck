@@ -106,7 +106,7 @@
   (revealer :transition "slideleft"
     :reveal {updates != ""}
     (box :orientation "h" :space-evenly false :class "update_box"
-      (button :onclick "~/.config/eww/scripts/start_update.sh"
+      (button :onclick "~/.config/eww/scripts/run_update.sh"
         :class "update_btn"
         (label :text "📦 ${updates} Updates" :class "update_text")
       )

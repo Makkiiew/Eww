@@ -21,6 +21,7 @@
 ;; Var: Only changes when we tell it to (via eww update)
 (defvar reveal_text false)
 (defvar music_reveal false)
+(defvar workspaces_reveal false)
 
 ;; Poll every 300ms so it feels responsive
 (defpoll workspaces :interval "300ms" "~/.config/eww/scripts/workspaces.sh")
@@ -50,13 +51,30 @@
 )
 
 ;; --- Top Bar Widgets ---
-
 (defwidget left_stuff []
-  (box :class "workspaces" :orientation "h" :space-evenly true :halign "start" :spacing 2
-    (for entry in workspaces
-      (button :class {entry.active ? "active" : "inactive"}
-        :onclick "qdbus6 org.kde.KWin /KWin org.kde.KWin.setCurrentDesktop ${entry.id}"
-        (label :text "${entry.name}")
+  ;; THE FIX: This outer box pins everything to the left so it stops stretching
+  (box :space-evenly false :halign "start"
+    (eventbox :onhover "${EWW_CMD} update workspaces_reveal=true"
+      :onhoverlost "${EWW_CMD} update workspaces_reveal=false"
+      :cursor "pointer"
+      (box :class "workspace_module" :space-evenly false
+        
+        ;; 1. The Always-Visible Icon
+        (label :class "workspace_icon" :text "❖")
+        
+        ;; 2. The Hidden Workspaces (Reveals on Hover)
+        (revealer :transition "slideright"
+          :reveal workspaces_reveal
+          :duration "350ms"
+          (box :class "workspaces" :orientation "h" :space-evenly true :spacing 5
+            (for entry in workspaces
+              (button :class {entry.active ? "active" : "inactive"}
+                :onclick "qdbus6 org.kde.KWin /KWin org.kde.KWin.setCurrentDesktop ${entry.id}"
+                (label :text "${entry.name}")
+              )
+            )
+          )
+        )
       )
     )
   )
